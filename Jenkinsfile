@@ -4,6 +4,9 @@ pipeline {
         JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
      }
+     options {
+        skipStagesAfterUnstable()
+    }
     stages {
     
         stage('Build') { 
@@ -19,6 +22,11 @@ pipeline {
                 always {
                     junit 'target/surefire-reports/*.xml' 
                 }
+            }
+        }
+         stage('Deliver') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
